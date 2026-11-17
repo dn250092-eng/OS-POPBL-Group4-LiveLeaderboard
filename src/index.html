@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Community Run 2026 - Live Leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🏃‍♂️ OS COMMUNITY RUN 2026</h1>
+        <p>Group 4: Timing & Live Leaderboard (I/O Management, Buffering & Spooling)</p>
+    </header>
 
+    <main class="container">
+        <!-- PANEL 1: HARDWARE I/O & INTERRUPT SIMULATOR -->
+        <section class="card control-panel">
+            <h2>1. Hardware I/O: RFID Timing Mat</h2>
+            <p class="subtitle">Simulates hardware interrupts when runners cross the finish line.</p>
+            
+            <div class="input-group">
+                <input type="text" id="runnerName" placeholder="Runner Name (e.g., Ali)" />
+                <input type="text" id="bibNumber" placeholder="Bib # (e.g., 1042)" />
+                <button onclick="triggerSingleInterrupt()" class="btn primary">Trigger 1 RFID Scan</button>
+            </div>
+
+            <div class="burst-controls">
+                <p><strong>Load Testing (High-Frequency Interrupts):</strong></p>
+                <button onclick="triggerBurstInterrupts(15)" class="btn warning">⚡ Simulate 15 Runners (Burst)</button>
+                <button onclick="triggerBurstInterrupts(50)" class="btn danger">🔥 Stress Test: 50 Runners</button>
+            </div>
+
+            <div class="system-log-box">
+                <h3>Kernel / Interrupt Log</h3>
+                <div id="interruptLogs" class="log-window"></div>
+            </div>
+        </section>
+
+        <!-- PANEL 2: OS KERNEL ENGINE (I/O BUFFER & SPOOLER) -->
+        <section class="card os-monitor">
+            <h2>2. OS Core: I/O Buffer & Spooling</h2>
+            <p class="subtitle">Prevents data loss during high-frequency finish line traffic.</p>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Buffer Capacity</span>
+                    <span id="bufferCount" class="stat-value">0 / 30</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Total Interrupts</span>
+                    <span id="totalInterrupts" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Dropped (Overflow)</span>
+                    <span id="droppedCount" class="stat-value text-danger">0</span>
+                </div>
+            </div>
+
+            <div class="buffer-visualizer">
+                <label>Memory Buffer Queue (FIFO):</label>
+                <div class="progress-bar">
+                    <div id="bufferBar" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div id="bufferQueueVisual" class="queue-blocks">
+                    <span class="empty-msg">Buffer is idle...</span>
+                </div>
+            </div>
+
+            <div class="spooler-control">
+                <label>Spooler Processing Speed (I/O Drain Rate):</label>
+                <select id="spoolSpeed" onchange="updateSpoolRate()">
+                    <option value="800">Normal (1 record / 0.8s)</option>
+                    <option value="300">Fast (1 record / 0.3s)</option>
+                    <option value="2000">Slow / Bottleneck (1 record / 2.0s)</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- PANEL 3: PUBLIC OUTPUT (LIVE LEADERBOARD) -->
+        <section class="card leaderboard-panel">
+            <h2>3. Spectator Live Leaderboard</h2>
+            <p class="subtitle">Spooled output broadcast seamlessly to spectators.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Bib #</th>
+                        <th>Runner Name</th>
+                        <th>Finish Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Data will be injected by Spooler -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="os_engine.js"></script>
+</body>
+</html>
